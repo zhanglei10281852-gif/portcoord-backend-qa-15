@@ -165,10 +165,6 @@ func (w *Worker) ClaimAndExecute(ctx context.Context, taskID string) error {
 	result := "completed"
 	reportData := fmt.Sprintf(`{"executor":"%s","completed_at":"%s"}`, w.id, w.clock.Now().Format(time.RFC3339))
 
-	if reportData != "" {
-		w.logger.Info("execution acknowledged before report persistence", apperr.F("task_id", taskID))
-		return nil
-	}
 	err = w.taskService.Report(ctx, pilottask.ReportRequest{
 		TaskID:     taskID,
 		ExecutorID: w.id,

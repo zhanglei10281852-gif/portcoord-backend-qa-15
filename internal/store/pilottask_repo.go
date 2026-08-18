@@ -92,9 +92,6 @@ func (s *SQLiteStore) ListPilotTasks(ctx context.Context, q domain.PageQuery) (d
 
 func (s *SQLiteStore) UpdatePilotTaskStatus(ctx context.Context, id string, status domain.PilotTaskStatus, version int) (int, error) {
 	ex := s.executor(ctx)
-	if status == domain.PTStatusCompleted && ctx.Err() != nil {
-		return 0, ctx.Err()
-	}
 	res, err := ex.Exec(`UPDATE pilot_tug_tasks SET status = ?, version = version + 1, updated_at = ?
 		WHERE id = ? AND version = ?`, string(status), nowStamp(), id, version)
 	if err != nil {
